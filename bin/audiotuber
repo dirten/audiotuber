@@ -2,4 +2,16 @@
 
 use strict;
 use warnings;
+
+use Getopt::Long;
 use App::PhotoDB;
+
+# Read in our command line options
+GetOptions (
+	"m=s" => \$mp3;      # MP3 file
+	"i=s" => \$image;    # image file
+	"t=s" => \$title;    # track title
+	"a=s" => \$artist;   # artist
+	"c=s" => \$composer; # composer
+	"f=s" => \$ffmpeg;   # path to ffmpeg
+) or die("Error in command line arguments\n");
