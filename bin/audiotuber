@@ -4,6 +4,7 @@ use strict;
 use warnings;
 
 use Getopt::Long;
+use File::Which;
 use App::PhotoDB;
 
 # Read in our command line options
@@ -17,7 +18,7 @@ GetOptions ( \%params,
 	"ffmpeg|f=s",   # path to ffmpeg
 ) or die("Error in command line arguments\n");
 
-my $ffmpeg = $params{ffmpeg} // 'ffmpeg';
+my $ffmpeg = $params{ffmpeg} // which('ffmpeg');
 if (!-x $ffmpeg) {
 	print "Could not find ffmpeg executable\n";
 	die;

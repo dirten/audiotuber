@@ -15,6 +15,7 @@ my $builder = $class->new(
 	build_requires => {
 	},
 	requires => {
+		'File::Which' => 0,
 	},
 	test_requires => {
 	},
