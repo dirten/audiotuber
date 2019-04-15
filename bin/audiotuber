@@ -18,3 +18,22 @@ GetOptions ( \%params,
 ) or die("Error in command line arguments\n");
 
 my $ffmpeg = $params{ffmpeg} // 'ffmpeg';
+if (!-x $ffmpeg) {
+	print "Could not find ffmpeg executable\n";
+	die;
+}
+
+if (!$params{mp3}) {
+	print "Must provide an MP3 file\n";
+	die;
+}
+
+if (!-e $params{mp3}) {
+	print "MP3 file $params{mp3} does not exist\n";
+	die;
+}
+
+if ($params{mp3} !~ m/\.mp3$/i) {
+	print "MP3 file $params{mp3} is not a valid MP3 file\n";
+	die;
+}
