@@ -16,6 +16,7 @@ my $builder = $class->new(
 	},
 	requires => {
 		'File::Which' => 0,
+		'Getopt::Long' => 0,
 	},
 	test_requires => {
 	},
