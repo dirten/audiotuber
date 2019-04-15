@@ -7,11 +7,14 @@ use Getopt::Long;
 use App::PhotoDB;
 
 # Read in our command line options
-GetOptions (
-	"m=s" => \$mp3;      # MP3 file
-	"i=s" => \$image;    # image file
-	"t=s" => \$title;    # track title
-	"a=s" => \$artist;   # artist
-	"c=s" => \$composer; # composer
-	"f=s" => \$ffmpeg;   # path to ffmpeg
+my %params = ();
+GetOptions ( \%params,
+	"mp3|m=s",      # MP3 file
+	"image|i=s",    # image file
+	"title|t=s",    # track title
+	"artist|a=s",   # artist
+	"composer|c=s", # composer
+	"ffmpeg|f=s",   # path to ffmpeg
 ) or die("Error in command line arguments\n");
+
+my $ffmpeg = $params{ffmpeg} // 'ffmpeg';
