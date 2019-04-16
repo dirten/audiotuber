@@ -5,6 +5,7 @@ use warnings;
 
 use Getopt::Long;
 use File::Which;
+use File::Basename;
 use App::AudioTuber qw(/./);
 
 # Read in our command line options
@@ -39,12 +40,13 @@ if ($params{mp3} !~ m/\.mp3$/i) {
 	die;
 }
 
-if (!-e $params{image}) {
+if ($params{image} && !-e $params{image}) {
         print "Image file $params{image} does not exist\n";
         die;
 }
 
 # Get filename without extension
+my $basename = fileparse($params{mp3}, qr/\.[^.]*/);
 
 # Read ID3 tags
 
@@ -54,4 +56,4 @@ if (!-e $params{image}) {
 my $imagefile = &generateImage({title=>$params{title}, artist=>$params{artist}, composer=>$params{composer},});
 
 # Render video
-#`$ffmpeg -loop 1 -framerate 2 -i $imagefile -i $mp3 -c:v libx264 -preset medium -tune stillimage -crf 18 -c:a aac -shortest -pix_fmt yuv420p output.mkv`;
+#`$ffmpeg -loop 1 -framerate 2 -i "$imagefile" -i "$mp3" -c:v libx264 -preset medium -tune stillimage -crf 18 -c:a aac -shortest -pix_fmt yuv420p "$basename.mkv"`;
