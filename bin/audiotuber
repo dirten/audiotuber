@@ -5,7 +5,7 @@ use warnings;
 
 use Getopt::Long;
 use File::Which;
-use App::PhotoDB;
+use App::AudioTuber qw(/./);
 
 # Read in our command line options
 my %params = ();
@@ -38,3 +38,11 @@ if ($params{mp3} !~ m/\.mp3$/i) {
 	print "MP3 file $params{mp3} is not a valid MP3 file\n";
 	die;
 }
+
+if (!-e $params{image}) {
+        print "Image file $params{image} does not exist\n";
+        die;
+}
+
+# Generate background image
+my $imagefile = &generateImage({title=>$params{title}, artist=>$params{artist}, composer=>$params{composer},});
