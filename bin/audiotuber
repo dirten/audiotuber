@@ -20,7 +20,7 @@ GetOptions ( \%params,
 ) or die("Error in command line arguments\n");
 
 my $ffmpeg = $params{ffmpeg} // which('ffmpeg');
-if (!-x $ffmpeg) {
+if (!defined($ffmpeg) || !-x $ffmpeg) {
 	print "Could not find ffmpeg executable\n";
 	die;
 }
