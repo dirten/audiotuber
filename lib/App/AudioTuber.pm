@@ -37,7 +37,7 @@ sub generateImage {
 	}
 
 	# Regardless of image origin, add the text
-	$object->Annotate(pointsize=>40, fill=>'black', text=>$text, gravity=>'Center');
+	$object->Annotate(pointsize=>40, stroke=>'black', fill=>'white', text=>$text, gravity=>'Center');
 
 	# Finally write out the temp image file
 	$object->Write(filename=>$filename, compression=>'None');
