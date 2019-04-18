@@ -59,7 +59,7 @@ my $artist = $params{artist} // $$tag{ARTIST};
 # Extract embedded cover art, if image not specified
 
 # Generate background image
-my $imagefile = &generateImage({title=>$title, artist=>$artist, composer=>$params{composer},});
+my $imagefile = &generateImage({image=>$params{image}, title=>$title, artist=>$artist, composer=>$params{composer},});
 
 # Render video
 `$ffmpeg -hide_banner -loglevel panic -loop 1 -framerate 2 -i "$imagefile" -i "$params{mp3}" -c:v libx264 -preset medium -tune stillimage -crf 18 -c:a aac -shortest -pix_fmt yuv420p "$basename.mkv" -y`;

@@ -27,6 +27,9 @@ sub generateImage {
 	# If a background image was specified, use it
 	if ($image && -e $image) {
 		# Open image for reading
+		$object->Read($image);
+		# Scale it to 1280x720
+		$object->Crop(gravity=>'Center', extent=>'1280x720', background=>'black');
 	} else {
 		# Otherwise make a blank image
 		$object->Set(size=>'1280x720');
