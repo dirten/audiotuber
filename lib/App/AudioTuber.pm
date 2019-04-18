@@ -1,10 +1,9 @@
 package App::AudioTuber;
 
-use MP3::Info;
 use Image::Magick;
 use Exporter qw(import);
 
-our @EXPORT_OK = qw(generateImage);
+our @EXPORT_OK = qw(generateImage coverArt);
 
 # Generate background image
 sub generateImage {
@@ -28,6 +27,9 @@ sub generateImage {
 	# If a background image was specified, use it
 	if ($image && -e $image) {
 		# Open image for reading
+		$object->Read($image);
+		# Scale it to 1280x720
+		$object->Crop(gravity=>'Center', extent=>'1280x720', background=>'black');
 	} else {
 		# Otherwise make a blank image
 		$object->Set(size=>'1280x720');
@@ -35,7 +37,7 @@ sub generateImage {
 	}
 
 	# Regardless of image origin, add the text
-	$object->Annotate(pointsize=>40, fill=>'black', text=>$text);
+	$object->Annotate(pointsize=>40, stroke=>'black', fill=>'white', text=>$text, gravity=>'Center');
 
 	# Finally write out the temp image file
 	$object->Write(filename=>$filename, compression=>'None');
@@ -46,6 +48,22 @@ sub generateImage {
 	return $filename;
 }
 
+sub coverArt {
+	my $href = shift;
+	my $ffmpeg = $href->{ffmpeg};
+	my $mp3 = $href->{mp3};
+
+	my $hasart = `$ffmpeg -hide_banner -loglevel panic -i "$mp3" 2>&1 | grep Stream | grep Video`;
+	chomp $hasart;
+	print "hasart: $hasart\n";
+	if ($hasart >= 1) {
+		print "Cover art found in $mp3\n";
+	        `$ffmpeg -hide_banner -loglevel panic -y -i "$mp3" -c:v png cover.png`;
+		return 'cover.png';
+	} else {
+		return;
+	}
+}
 
 # This ensures the lib loads smoothly
 1;
