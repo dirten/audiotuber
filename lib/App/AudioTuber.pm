@@ -1,6 +1,5 @@
 package App::AudioTuber;
 
-use MP3::Info;
 use Image::Magick;
 use Exporter qw(import);
 

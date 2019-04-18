@@ -6,6 +6,7 @@ use warnings;
 use Getopt::Long;
 use File::Which;
 use File::Basename;
+use MP3::Info;
 use App::AudioTuber qw(/./);
 
 # Read in our command line options
@@ -49,11 +50,16 @@ if ($params{image} && !-e $params{image}) {
 my $basename = fileparse($params{mp3}, qr/\.[^.]*/);
 
 # Read ID3 tags
+my $tag = get_mp3tag($params{mp3});
+
+# Decide which tags to use, command line takes precedence
+my $title = $params{title} // $$tag{TITLE};
+my $artist = $params{artist} // $$tag{ARTIST};
 
 # Extract embedded cover art, if image not specified
 
 # Generate background image
-my $imagefile = &generateImage({title=>$params{title}, artist=>$params{artist}, composer=>$params{composer},});
+my $imagefile = &generateImage({title=>$title, artist=>$artist, composer=>$params{composer},});
 
 # Render video
 `$ffmpeg -hide_banner -loglevel panic -loop 1 -framerate 2 -i "$imagefile" -i "$params{mp3}" -c:v libx264 -preset medium -tune stillimage -crf 18 -c:a aac -shortest -pix_fmt yuv420p "$basename.mkv" -y`;
