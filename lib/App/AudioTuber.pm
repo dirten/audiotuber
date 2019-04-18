@@ -3,7 +3,7 @@ package App::AudioTuber;
 use Image::Magick;
 use Exporter qw(import);
 
-our @EXPORT_OK = qw(generateImage);
+our @EXPORT_OK = qw(generateImage coverArt);
 
 # Generate background image
 sub generateImage {
@@ -48,6 +48,22 @@ sub generateImage {
 	return $filename;
 }
 
+sub coverArt {
+	my $href = shift;
+	my $ffmpeg = $href->{ffmpeg};
+	my $mp3 = $href->{mp3};
+
+	my $hasart = `$ffmpeg -hide_banner -loglevel panic -i "$mp3" 2>&1 | grep Stream | grep Video`;
+	chomp $hasart;
+	print "hasart: $hasart\n";
+	if ($hasart >= 1) {
+		print "Cover art found in $mp3\n";
+	        `$ffmpeg -hide_banner -loglevel panic -y -i "$mp3" -c:v png cover.png`;
+		return 'cover.png';
+	} else {
+		return;
+	}
+}
 
 # This ensures the lib loads smoothly
 1;

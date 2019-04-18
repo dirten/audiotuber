@@ -57,12 +57,17 @@ my $title = $params{title} // $$tag{TITLE};
 my $artist = $params{artist} // $$tag{ARTIST};
 
 # Extract embedded cover art, if image not specified
+my $coverart = &coverArt({ffmpeg=>$ffmpeg, mp3=>$params{mp3}});
+
+# Decide which image to use
+my $image = $params{'image'} // $coverart // undef;
 
 # Generate background image
-my $imagefile = &generateImage({image=>$params{image}, title=>$title, artist=>$artist, composer=>$params{composer},});
+my $imagefile = &generateImage({image=>$image, title=>$title, artist=>$artist, composer=>$params{composer},});
 
 # Render video
 `$ffmpeg -hide_banner -loglevel panic -loop 1 -framerate 2 -i "$imagefile" -i "$params{mp3}" -c:v libx264 -preset medium -tune stillimage -crf 18 -c:a aac -shortest -pix_fmt yuv420p "$basename.mkv" -y`;
 
 # Tidy up temp files
 unlink $imagefile;
+unlink $coverart if $coverart;
