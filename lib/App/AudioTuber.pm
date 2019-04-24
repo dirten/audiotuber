@@ -17,9 +17,9 @@ sub generateImage {
 
 	# Generate image caption
 	my $text = '';
-	$text .= "Title: $title\n" if $title;
-	$text .= "Artist: $artist\n" if $artist;
-	$text .= "Composer: $composer\n" if $composer;
+	$text .= "$title\n" if $title;
+	$text .= "$artist\n" if $artist;
+	$text .= "$composer\n" if $composer;
 
 	# Create a new ImageMagick object
 	my $object = Image::Magick->new;
