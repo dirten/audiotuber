@@ -26,7 +26,7 @@ if (!defined($ffmpeg) || !-x $ffmpeg) {
 }
 
 if (!$params{mp3}) {
-	die "Must provide an MP3 file\n";
+	die "Must provide an MP3 file with -m\n";
 }
 
 if (!-e $params{mp3}) {
@@ -50,6 +50,14 @@ my $tag = get_mp3tag($params{mp3});
 # Decide which tags to use, command line takes precedence
 my $title = $params{title} // $$tag{TITLE};
 my $artist = $params{artist} // $$tag{ARTIST};
+
+if (!$title) {
+	die "MP3 file did not contain a title, and none was supplied with -t\n";
+}
+
+if (!$artist) {
+	die "MP3 file did not contain an artist, and none was supplied with -a\n";
+}
 
 # Extract embedded cover art, if image not specified
 my $coverart = &coverArt({ffmpeg=>$ffmpeg, mp3=>$params{mp3}});
