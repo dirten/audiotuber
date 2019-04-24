@@ -22,28 +22,23 @@ GetOptions ( \%params,
 
 my $ffmpeg = $params{ffmpeg} // which('ffmpeg');
 if (!defined($ffmpeg) || !-x $ffmpeg) {
-	print "Could not find ffmpeg executable\n";
-	die;
+	die "Could not find ffmpeg executable\n";
 }
 
 if (!$params{mp3}) {
-	print "Must provide an MP3 file\n";
-	die;
+	die "Must provide an MP3 file\n";
 }
 
 if (!-e $params{mp3}) {
-	print "MP3 file $params{mp3} does not exist\n";
-	die;
+	die "MP3 file $params{mp3} does not exist\n";
 }
 
 if ($params{mp3} !~ m/\.mp3$/i) {
-	print "MP3 file $params{mp3} is not a valid MP3 file\n";
-	die;
+	die "MP3 file $params{mp3} is not a valid MP3 file\n";
 }
 
 if ($params{image} && !-e $params{image}) {
-        print "Image file $params{image} does not exist\n";
-        die;
+        die "Image file $params{image} does not exist\n";
 }
 
 # Get filename without extension
