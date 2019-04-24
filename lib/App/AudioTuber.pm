@@ -29,7 +29,8 @@ sub generateImage {
 		# Open image for reading
 		$object->Read($image);
 		# Scale it to 1280x720
-		$object->Crop(gravity=>'Center', extent=>'1280x720', background=>'black');
+		$object->Resize(geometry=>'1280x720');
+		$object->Extent(gravity=>'Center', geometry=>'1280x720', background=>'black');
 	} else {
 		# Otherwise make a blank image
 		$object->Set(size=>'1280x720');
