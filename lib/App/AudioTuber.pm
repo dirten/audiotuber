@@ -53,11 +53,9 @@ sub coverArt {
 	my $ffmpeg = $href->{ffmpeg};
 	my $mp3 = $href->{mp3};
 
-	my $hasart = `$ffmpeg -hide_banner -loglevel panic -i "$mp3" 2>&1 | grep Stream | grep Video`;
+	my $hasart = `$ffmpeg -hide_banner -i "$mp3" 2>&1 | grep Stream | grep Video | wc -l`;
 	chomp $hasart;
-	print "hasart: $hasart\n";
 	if ($hasart >= 1) {
-		print "Cover art found in $mp3\n";
 	        `$ffmpeg -hide_banner -loglevel panic -y -i "$mp3" -c:v png cover.png`;
 		return 'cover.png';
 	} else {
