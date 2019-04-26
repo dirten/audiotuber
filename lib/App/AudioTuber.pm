@@ -1,5 +1,7 @@
 package App::AudioTuber;
 
+use strict;
+use warnings;
 use Image::Magick;
 use Exporter qw(import);
 
