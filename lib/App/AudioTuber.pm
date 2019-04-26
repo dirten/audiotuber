@@ -5,7 +5,7 @@ use warnings;
 use Image::Magick;
 use Exporter qw(import);
 
-our @EXPORT_OK = qw(generateImage coverArt);
+our @EXPORT_OK = qw(generateImage coverArt renderVideo);
 
 # Generate background image
 sub generateImage {
@@ -64,6 +64,16 @@ sub coverArt {
 	} else {
 		return;
 	}
+}
+
+sub renderVideo {
+	my $href = shift;
+	my $ffmpeg = $href->{ffmpeg};
+	my $imagefile = $href->{imagefile};
+	my $mp3 = $href->{mp3};
+	my $basename = $href->{basename};
+	`$ffmpeg -hide_banner -loglevel panic -loop 1 -framerate 2 -i "$imagefile" -i "$mp3" -c:v libx264 -preset medium -tune stillimage -crf 18 -c:a aac -shortest -pix_fmt yuv420p "$basename.mkv" -y`;
+	return;
 }
 
 # This ensures the lib loads smoothly

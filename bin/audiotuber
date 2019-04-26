@@ -140,7 +140,7 @@ foreach my $mp3 (@mp3s) {
 	my $imagefile = &generateImage({image=>$image, title=>$title, artist=>$artist, composer=>$params{composer},});
 
 	# Render video
-	`$ffmpeg -hide_banner -loglevel panic -loop 1 -framerate 2 -i "$imagefile" -i "$mp3" -c:v libx264 -preset medium -tune stillimage -crf 18 -c:a aac -shortest -pix_fmt yuv420p "$basename.mkv" -y`;
+	&renderVideo({ffmpeg=>$ffmpeg, imagefile=>$imagefile, mp3=>$mp3, basename=>$basename});
 
 	# Tidy up temp files
 	unlink $imagefile;
