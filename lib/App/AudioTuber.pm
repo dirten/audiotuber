@@ -4,8 +4,10 @@ use strict;
 use warnings;
 use Image::Magick;
 use Exporter qw(import);
+use FFmpeg::Command;
+use File::Which;
 
-our @EXPORT_OK = qw(generateImage coverArt renderVideo);
+our @EXPORT_OK = qw(generateImage coverArt renderVideo ffmpeg);
 
 # Generate background image
 sub generateImage {
@@ -53,13 +55,15 @@ sub generateImage {
 
 sub coverArt {
 	my $href = shift;
-	my $ffmpeg = $href->{ffmpeg};
+	my $ffmpeg = $href->{ffmpeg} // &ffmpeg;
 	my $mp3 = $href->{mp3};
 
-	my $hasart = `$ffmpeg -hide_banner -i "$mp3" 2>&1 | grep Stream | grep Video | wc -l`;
-	chomp $hasart;
-	if ($hasart >= 1) {
-	        `$ffmpeg -hide_banner -loglevel panic -y -i "$mp3" -c:v png cover.png`;
+	# New FFmpeg object
+	my $ff = FFmpeg::Command->new($ffmpeg);
+	$ff->input_file($mp3) or die $ff->errstr;
+	$ff->output_file('cover.png') or die $ff->errstr;
+
+	if ($ff->exec()) {
 		return 'cover.png';
 	} else {
 		return;
@@ -68,12 +72,35 @@ sub coverArt {
 
 sub renderVideo {
 	my $href = shift;
-	my $ffmpeg = $href->{ffmpeg};
+	my $ffmpeg = $href->{ffmpeg} // &ffmpeg;
 	my $imagefile = $href->{imagefile};
 	my $mp3 = $href->{mp3};
 	my $basename = $href->{basename};
-	`$ffmpeg -hide_banner -loglevel panic -loop 1 -framerate 2 -i "$imagefile" -i "$mp3" -c:v libx264 -preset medium -tune stillimage -crf 18 -c:a aac -shortest -pix_fmt yuv420p "$basename.mkv" -y`;
+
+	# New FFmpeg object
+	my $ff = FFmpeg::Command->new($ffmpeg);
+	$ff->input_file([$imagefile, $mp3]);
+	$ff->output_file("$basename.mkv");
+	$ff->options(
+		'-pix_fmt'   => 'yuv420p',
+		'-loop'      => '1',
+		'-framerate' => '2',
+		'-c:v'       => 'libx264',
+		'-preset'    => 'medium',
+		'-tune'      => 'stillimage',
+		'-crf'       => '18',
+		'-c:a'       => 'aac',
+	);
+	$ff->exec() or die $ff->errstr;
 	return;
+}
+
+sub ffmpeg {
+	my $ffmpeg = which('ffmpeg');
+	if (!defined($ffmpeg) || !-x $ffmpeg) {
+	        die "Could not find ffmpeg executable\n";
+	}
+	return $ffmpeg;
 }
 
 # This ensures the lib loads smoothly

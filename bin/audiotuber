@@ -63,7 +63,6 @@ Jonathan Gazeley
 =cut
 
 use Getopt::Long;
-use File::Which;
 use File::Basename;
 use MP3::Info;
 use App::AudioTuber qw(/./);
@@ -86,7 +85,7 @@ if (scalar @mp3s == 0) {
 	die "Must provide at least one MP3 file\n";
 }
 
-my $ffmpeg = $params{ffmpeg} // which('ffmpeg');
+my $ffmpeg = $params{ffmpeg} // &ffmpeg;
 if (!defined($ffmpeg) || !-x $ffmpeg) {
 	die "Could not find ffmpeg executable\n";
 }

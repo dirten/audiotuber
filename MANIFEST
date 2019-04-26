@@ -6,3 +6,5 @@ README.pod
 t/00-compile.t
 t/01-perlcritic.t
 t/perlcriticrc
+META.yml
+META.json
