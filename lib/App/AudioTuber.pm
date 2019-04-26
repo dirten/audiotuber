@@ -75,7 +75,22 @@ sub renderVideo {
 	my $imagefile = $href->{imagefile};
 	my $mp3 = $href->{mp3};
 	my $basename = $href->{basename};
-	`$ffmpeg -hide_banner -loglevel panic -loop 1 -framerate 2 -i "$imagefile" -i "$mp3" -c:v libx264 -preset medium -tune stillimage -crf 18 -c:a aac -shortest -pix_fmt yuv420p "$basename.mkv" -y`;
+
+	# New FFmpeg object
+	my $ff = FFmpeg::Command->new($ffmpeg);
+	$ff->input_file([$imagefile, $mp3]);
+	$ff->output_file("$basename.mkv");
+	$ff->options(
+		'-pix_fmt'   => 'yuv420p',
+		'-loop'      => '1',
+		'-framerate' => '2',
+		'-c:v'       => 'libx264',
+		'-preset'    => 'medium',
+		'-tune'      => 'stillimage',
+		'-crf'       => '18',
+		'-c:a'       => 'aac',
+	);
+	$ff->exec() or die $ff->errstr;
 	return;
 }
 
