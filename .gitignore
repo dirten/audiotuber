@@ -3,6 +3,7 @@
 /META.yml
 /META.json
 /MYMETA.*
+/MANIFEST.SKIP.bak
 *.o
 *.pm.tdy
 *.bs

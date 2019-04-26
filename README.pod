@@ -1,0 +1,57 @@
+=head1 NAME
+
+App::Audiotuber - app to convert MP3 audio files to videos
+
+=head1 SYNOPSIS
+
+    audiotuber [OPTIONS] MP3FILE ... [MP3FILE...]
+
+=head1 DESCRIPTION
+
+Audiotuber is an app to convert MP3 audio files to videos, so they can be uploaded to video sharing sites.
+
+If the MP3 file contains ID3 tags with the track name and artist, they will be used as a caption in the video.
+These fields can also be overridden with command line options.
+
+If the MP3 file contains embedded cover art, it will be used a still image in the video. An image file can
+also be provided with command line options. If no cover art is available, the video will be plain black with
+the caption overlaid.
+
+=head1 OPTIONS
+
+=over
+
+=item -i --image
+
+Image file to be used as a still image in the video
+
+=item -t --title
+
+Track title to be displayed in the video
+
+=item -a --artist
+
+Track artist to be displayed in the video
+
+=item -c --composer
+
+Track composer to be displayed in the video
+
+=item -f --ffmpeg
+
+Path to ffmpeg binary. Only needs to be provided if ffmpeg is not in your system PATH
+
+=back
+
+=head1 BUGS/CAVEATS/etc
+
+Report bugs in the L<Github issue tracker|https://github.com/djjudas21/audiotuber/issues>
+
+=head1 AUTHOR
+
+Jonathan Gazeley
+
+=head1 SEE ALSO
+
+=head1 COPYRIGHT and LICENSE
+
