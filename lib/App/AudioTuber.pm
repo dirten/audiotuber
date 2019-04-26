@@ -4,6 +4,7 @@ use strict;
 use warnings;
 use Image::Magick;
 use Exporter qw(import);
+use FFmpeg::Command;
 
 our @EXPORT_OK = qw(generateImage coverArt renderVideo);
 
@@ -56,10 +57,12 @@ sub coverArt {
 	my $ffmpeg = $href->{ffmpeg};
 	my $mp3 = $href->{mp3};
 
-	my $hasart = `$ffmpeg -hide_banner -i "$mp3" 2>&1 | grep Stream | grep Video | wc -l`;
-	chomp $hasart;
-	if ($hasart >= 1) {
-	        `$ffmpeg -hide_banner -loglevel panic -y -i "$mp3" -c:v png cover.png`;
+	# New FFmpeg object
+	my $ff = FFmpeg::Command->new($ffmpeg);
+	$ff->input_file($mp3) or die $ff->errstr;
+	$ff->output_file('cover.png') or die $ff->errstr;
+
+	if ($ff->exec()) {
 		return 'cover.png';
 	} else {
 		return;
