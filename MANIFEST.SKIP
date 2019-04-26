@@ -88,7 +88,6 @@
 
 # Avoid archives of this distribution
 \bApp-AudioTuber-[\d\.\_]+
-TODO
 
 # Avoid test media files
 \.jpe?g$
