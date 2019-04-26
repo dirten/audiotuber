@@ -5,8 +5,9 @@ use warnings;
 use Image::Magick;
 use Exporter qw(import);
 use FFmpeg::Command;
+use File::Which;
 
-our @EXPORT_OK = qw(generateImage coverArt renderVideo);
+our @EXPORT_OK = qw(generateImage coverArt renderVideo ffmpeg);
 
 # Generate background image
 sub generateImage {
@@ -54,7 +55,7 @@ sub generateImage {
 
 sub coverArt {
 	my $href = shift;
-	my $ffmpeg = $href->{ffmpeg};
+	my $ffmpeg = $href->{ffmpeg} // &ffmpeg;
 	my $mp3 = $href->{mp3};
 
 	# New FFmpeg object
@@ -71,7 +72,7 @@ sub coverArt {
 
 sub renderVideo {
 	my $href = shift;
-	my $ffmpeg = $href->{ffmpeg};
+	my $ffmpeg = $href->{ffmpeg} // &ffmpeg;
 	my $imagefile = $href->{imagefile};
 	my $mp3 = $href->{mp3};
 	my $basename = $href->{basename};
@@ -92,6 +93,14 @@ sub renderVideo {
 	);
 	$ff->exec() or die $ff->errstr;
 	return;
+}
+
+sub ffmpeg {
+	my $ffmpeg = which('ffmpeg');
+	if (!defined($ffmpeg) || !-x $ffmpeg) {
+	        die "Could not find ffmpeg executable\n";
+	}
+	return $ffmpeg;
 }
 
 # This ensures the lib loads smoothly
