@@ -5,7 +5,7 @@ use warnings;
 
 =head1 NAME
 
-App::Audiotuber - app to convert MP3 audio files to videos
+App::AudioTuber - App to convert MP3 audio files to videos
 
 =head1 SYNOPSIS
 
@@ -13,7 +13,7 @@ App::Audiotuber - app to convert MP3 audio files to videos
 
 =head1 DESCRIPTION
 
-Audiotuber is an app to convert MP3 audio files to videos, so they can be uploaded to video sharing sites.
+AudioTuber is an app to convert MP3 audio files to videos, so they can be uploaded to video sharing sites.
 
 If the MP3 file contains ID3 tags with the track name and artist, they will be used as a caption in the video.
 These fields can also be overridden with command line options.
