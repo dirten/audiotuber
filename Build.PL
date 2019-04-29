@@ -32,6 +32,7 @@ my $builder = $class->new(
 		'File::Basename' => 0,
 		'MP3::Info' => 0,
 		'FFmpeg::Command' => 0,
+		'Image::Magick' => 0,
 	},
 	test_requires => {
 		'Test::More' => '0.47',
