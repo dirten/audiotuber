@@ -12,8 +12,6 @@ jobs:
   - stage: test
     name: Perl tests
     script: perl Build.PL && ./Build test
-  - name: Database migrations
-    script: tests/migrations.sh
     #  - stage: deploy
     #    if: tag IS present
     #    script: perl Build.PL && ./Build manifest && ./Build && ./Build dist
