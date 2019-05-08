@@ -1,4 +1,5 @@
 language: perl
+dist: xenial
 perl:
 - '5.26'
   #env:
